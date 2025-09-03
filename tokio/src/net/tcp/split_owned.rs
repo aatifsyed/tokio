@@ -238,6 +238,13 @@ impl OwnedReadHalf {
         self.inner.readable().await
     }
 
+    /// Polls for read readiness.
+    ///
+    /// See [`TcpStream::poll_read_ready`] for more.
+    pub fn poll_readable(&self, cx: &mut Context<'_>) -> Poll<io::Result<()>> {
+        self.inner.poll_read_ready(cx)
+    }
+
     /// Tries to read data from the stream into the provided buffer, returning how
     /// many bytes were read.
     ///
@@ -398,6 +405,13 @@ impl OwnedWriteHalf {
     /// `Poll::Pending`.
     pub async fn writable(&self) -> io::Result<()> {
         self.inner.writable().await
+    }
+
+    /// Polls for write readiness.
+    ///
+    /// See [`TcpStream::poll_write_ready`] for more.
+    pub fn poll_writable(&self, cx: &mut Context<'_>) -> Poll<io::Result<()>> {
+        self.inner.poll_write_ready(cx)
     }
 
     /// Tries to write a buffer to the stream, returning how many bytes were
